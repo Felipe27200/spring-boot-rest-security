@@ -18,7 +18,7 @@
 	</properties>
 	<dependencies>
 		<!---
-			Spring security make all automatically 
+			Spring security make automatically
 			secure all the endpoints in the application.
 		 -->
 		<dependency>
