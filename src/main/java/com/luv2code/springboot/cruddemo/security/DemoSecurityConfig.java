@@ -99,14 +99,30 @@ public class DemoSecurityConfig
     public UserDetailsManager userDetailsManager(DataSource dataSource) // Inject the datasource that is autoconfigured by Spring Boot
     {
         /*
-        * Tells Spring Security to use JDBC authentication
-        * with our data source.
-        *
-        * So, we will read the roles and users from the DB.
-        *
-        * We must have some specific tables and columns
-        * for the correct use of JDBC Authentication.
+        * +--------------------------+
+        * | HOW TO USE CUSTOM TABLES |
+        * +--------------------------+
         * */
-        return new JdbcUserDetailsManager(dataSource);
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        // Define query to retrieve user by username
+        /*
+        * Here we are telling spring security how to access our custom table.
+        * */
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+            /* The name of the entities must match with entities in the DB. */
+            "select user_id, pw, active from members where user_id = ?"
+        );
+
+        // Define query to retrieve the authorities/roles by username
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+            "select user_id, role from roles where user_id = ?"
+        );
+
+        /*
+        * We send the variable with set up for the
+        * custom tables.
+        * */
+        return jdbcUserDetailsManager;
     }
 }
