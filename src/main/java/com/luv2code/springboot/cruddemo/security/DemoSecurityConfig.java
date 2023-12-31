@@ -23,7 +23,10 @@ public class DemoSecurityConfig
     {
         UserDetails john = User.builder()
                 .username("john")
-                .password("{noop}test123") // {noop} tells spring security that the password is in plain text
+                .password("{noop}test123")
+                // {noop} tells spring security that the password is in plain text
+                // In the database we must set the type of encryption inside the {}
+                // That tells Spring Security what encryption uses
                 .roles("EMPLOYEE")
                 .build();
 
